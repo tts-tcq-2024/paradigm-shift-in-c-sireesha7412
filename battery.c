@@ -9,9 +9,22 @@ int checkRange(float value, float lower, float upper) {
     return (value >= lower && value <= upper);
 }
 
+int isApproachingUpperLimit(float value, float upperLimit) {
+    return (value >= upperLimit - 4 && value < upperLimit);
+}
+
+int isApproachingLowerLimit(float value, float lowerLimit) {
+    return (value >= lowerLimit && value < lowerLimit + 4);
+}
+
 void setWarningLevel(float value, float upperLimit, float lowerLimit, float *warningLevel) {
-    *warningLevel = (value >= upperLimit - 4 && value < upperLimit) ? 1 : 
-                    (value >= lowerLimit && value < lowerLimit + 4) ? 2 : 0;
+    if (isApproachingUpperLimit(value, upperLimit)) {
+        *warningLevel = 1;
+    } else if (isApproachingLowerLimit(value, lowerLimit)) {
+        *warningLevel = 2;
+    } else {
+        *warningLevel = 0;
+    }
 }
 
 int isTemperatureInRange(float temperature, float* warningLevel) {
