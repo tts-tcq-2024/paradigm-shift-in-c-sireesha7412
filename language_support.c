@@ -1,6 +1,6 @@
 #include "language_support.h"
 
-const char* messages[LANG_COUNT][3] = {
+const char* messages[LANG_COUNT][2] = {
     [LANG_ENG] = {
         "Temperature out of range!",
         "State of Charge out of range!",
