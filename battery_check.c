@@ -1,3 +1,5 @@
+#include "battery_check.h"
+#include "language_support.h"
 #define MIN_TEMPERATURE 0.0
 #define MAX_TEMPERATURE 45.0
 #define MIN_SOC 20.0
