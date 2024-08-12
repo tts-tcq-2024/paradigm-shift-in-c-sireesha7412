@@ -1,5 +1,5 @@
-#ifndef LANG_H
-#define LANG_H
+#ifndef LANGUAGE_H
+#define LANGUAGE_H
 #include <stdio.h>
 
 typedef enum {
