@@ -1,21 +1,9 @@
-#ifndef BATTERY_H
-#define BATTERY_H
+#ifndef BATTERY_CHECK_H
+#define BATTERY_CHECK_H
 
-typedef int (*CheckFunc)(float, float*);
-
-typedef struct {
-    CheckFunc check;
-    float value;
-    float warningLevel;
-    const char *message;
-    const char *warningMessage;
-} Check;
-
-void printMessage(const char *message);
-int isTemperatureInRange(float temperature, float* warningLevel);
-int isSocInRange(float soc, float* warningLevel);
-int isChargeRateInRange(float chargeRate, float* warningLevel);
+#include "lang.h" 
 int batteryIsOk(float temperature, float soc, float chargeRate);
+void setPreferredLanguage(Language newLanguage); // Corrected spelling
 
-
+#endif // BATTERY_CHECK_H
 
