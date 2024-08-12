@@ -1,6 +1,13 @@
 #include "language_support.h"
+// Enum for message types
+typedef enum {
+    MESSAGE_TEMPERATURE_OUT_OF_RANGE,
+    MESSAGE_SOC_OUT_OF_RANGE,
+    MESSAGE_CHARGE_RATE_OUT_OF_RANGE,
+    MESSAGE_COUNT
+} MessageType;
 
-const char* messages[LANG_COUNT][2] = {
+const char* messages[LANG_COUNT][MESSAGE_COUNT] = {
     [LANG_ENG] = {
         "Temperature out of range!",
         "State of Charge out of range!",
@@ -10,18 +17,13 @@ const char* messages[LANG_COUNT][2] = {
         "Temperatur außerhalb des Bereichs!",
         "Ladezustand außerhalb des Bereichs!",
         "Laderate außerhalb des zulässigen Bereichs!"
-    },
+    }
 };
 
-const char* getErrorMessage(Language lang, int messageType) {
+const char* getErrorMessage(Language lang, MessageType messageType) {
     // Ensure the language and messageType are within valid bounds
-    if (lang >= LANG_COUNT || messageType < 0 || messageType > 1) {
+    if (lang >= LANG_COUNT || messageType >= MESSAGE_COUNT) {
         return "Invalid language or message type!";
     }
     return messages[lang][messageType];
 }
-
-// Usage examples:
-// const char* tempMessage = getErrorMessage(LANG_ENG, 0);
-// const char* socMessage = getErrorMessage(LANG_GER, 1);
-
