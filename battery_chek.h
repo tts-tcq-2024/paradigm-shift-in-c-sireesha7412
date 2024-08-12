@@ -17,4 +17,5 @@ int isSocInRange(float soc, float* warningLevel);
 int isChargeRateInRange(float chargeRate, float* warningLevel);
 int batteryIsOk(float temperature, float soc, float chargeRate);
 
-#endif // BATTERY_H
+
+
