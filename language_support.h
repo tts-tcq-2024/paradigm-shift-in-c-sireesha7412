@@ -1,12 +1,10 @@
 #ifndef LANG_H
 #define LANG_H
-
 #include <stdio.h>
 
 typedef enum {
     LANG_ENG, 
     LANG_GER,
-    LANG_SPA,  // Added support for Spanish
     LANG_COUNT 
 } Language;
 
