@@ -1,71 +1,35 @@
-#include <stdio.h>
-#include "battery.h"
+#define MIN_TEMPERATURE 0.0
+#define MAX_TEMPERATURE 45.0
+#define MIN_SOC 20.0
+#define MAX_SOC 80.0
+#define MAX_CHARGE_RATE 0.8
 
-void printMessage(const char *message) {
-    printf("%s", message);
-}
-
-int checkRange(float value, float lower, float upper) {
-    return (value >= lower && value <= upper);
-}
-
-int isApproachingUpperLimit(float value, float upperLimit) {
-    return (value >= upperLimit - 4 && value < upperLimit);
-}
-
-int isApproachingLowerLimit(float value, float lowerLimit) {
-    return (value >= lowerLimit && value < lowerLimit + 4);
-}
-
-void setWarningLevel(float value, float upperLimit, float lowerLimit, float *warningLevel) {
-    if (isApproachingUpperLimit(value, upperLimit)) {
-        *warningLevel = 1;
-    } else if (isApproachingLowerLimit(value, lowerLimit)) {
-        *warningLevel = 2;
-    } else {
-        *warningLevel = 0;
+int isTemperatureOk(float temperature, int lang) {
+    if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATURE) {
+        printf("%s\n", getTemperatureOutOfRangeMessage(lang));
+        return 0; // Not okay
     }
+    return 1; // Okay
 }
 
-int isTemperatureInRange(float temperature, float* warningLevel) {
-    setWarningLevel(temperature, 45, 0, warningLevel);
-    return checkRange(temperature, 0, 45);
-}
-
-int isSocInRange(float soc, float* warningLevel) {
-    setWarningLevel(soc, 80, 20, warningLevel);
-    return checkRange(soc, 20, 80);
-}
-
-int isChargeRateInRange(float chargeRate, float* warningLevel) {
-    setWarningLevel(chargeRate, 0.8, 0, warningLevel);
-    return checkRange(chargeRate, 0, 0.8);
-}
-
-void handleWarnings(float warningLevel, const char* approachingPeak, const char* approachingDischarge) {
-    if (warningLevel == 1) {
-        printMessage(approachingPeak);
-    } else if (warningLevel == 2) {
-        printMessage(approachingDischarge);
+int isSocOk(float soc, int lang) {
+    if (soc < MIN_SOC || soc > MAX_SOC) {
+        printf("%s\n", getSocOutOfRangeMessage(lang));
+        return 0; // Not okay
     }
+    return 1; // Okay
 }
 
-int batteryIsOk(float temperature, float soc, float chargeRate) {
-    Check checks[] = {
-        {isTemperatureInRange, temperature, 0, "Temperature out of range!\n", "Warning: Approaching charge-peak temperature\n"},
-        {isSocInRange, soc, 0, "State of Charge out of range!\n", "Warning: Approaching charge-peak SoC\n"},
-        {isChargeRateInRange, chargeRate, 0, "Charge Rate out of range!\n", "Warning: Approaching charge-peak charge rate\n"}
-    };
-
-    for (int i = 0; i < sizeof(checks) / sizeof(checks[0]); ++i) {
-        float warningLevel = 0;
-        if (!checks[i].check(checks[i].value, &warningLevel)) {
-            printMessage(checks[i].message);
-            return 0;
-        } else {
-            handleWarnings(warningLevel, checks[i].warningMessage, "Warning: Approaching discharge level\n");
-        }
+int isChargeRateOk(float chargeRate, int lang) {
+    if (chargeRate > MAX_CHARGE_RATE) {
+        printf("%s\n", getChargeRateOutOfRangeMessage(lang));
+        return 0; // Not okay
     }
+    return 1; // Okay
+}
 
-    return 1;
+int batteryIsOk(float temperature, float soc, float chargeRate, int lang) {
+    return isTemperatureOk(temperature, lang) &&
+           isSocOk(soc, lang) &&
+           isChargeRateOk(chargeRate, lang);
 }
